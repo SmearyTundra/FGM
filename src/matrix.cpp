@@ -501,9 +501,9 @@ void select_multi_edges( double rates[], int index_selected_edges[], int *size_i
 // log_ratio_g_prior contains log(g_prior[ij]/(1-g_prior[ij])) if called in the Bernoulli case, or it contains the Beta hyparameters (a,b) if called in the BetaBernouolli case.
 // Prior is 1 for BetaBernoulli case, 2 for Bernoulli case
 void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Prior, int G[], int *ptr_E, int index_row[], int index_col[], int *sub_qp, double Ds[], double Dsijj[],
-				            double sigma[], double K[], int *b, int *p )
+				            double sigma[], double K[], int *b, int *p, int Theta[], int z[], int *n_groups, int groups_cardinality[] )
 {
-	int b1 = *b, one = 1, two = 2, dim = *p, p1 = dim - 1, p2 = dim - 2, dim1 = dim + 1, p2x2 = ( dim - 2 ) * 2;
+	int b1 = *b, one = 1, two = 2, dim = *p, p1 = dim - 1, p2 = dim - 2, dim1 = dim + 1, p2x2 = ( dim - 2 ) * 2, dim_groups = *n_groups;;
 	double alpha = 1.0, beta = 0.0, alpha1 = -1.0, beta1 = 1.0;
 	char transT = 'T', transN = 'N', sideL = 'L';																	
 	int possible_links = dim*(dim-1)*0.5;
@@ -531,7 +531,20 @@ void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Pri
 		{
 			i  = index_row[ counter ];
 			j  = index_col[ counter ];
-			ij = j * dim + i;
+
+            u = z[i];
+            v = z[j];
+            uv = v * dim_groups + u;
+            Suv = Theta[uv];
+
+            if(u!=v) {
+                Tuv = groups_cardinality[u] * groups_cardinality[v];
+            }
+            else{
+                Tuv = groups_cardinality[u]*(groups_cardinality[u]-1)*0.5;
+            }
+
+            ij = j * dim + i;
 			jj = j * dim1;
 			
 			Dsjj = Ds[ jj ];
@@ -592,15 +605,15 @@ void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Pri
 
 				if(G[ij] == 1){ //death move
 					//Empty graphs can not enter in this case
-					log_rate += log((possible_links - E)/(log_ratio_g_prior[1] + possible_links - E - 1)) + log( (log_ratio_g_prior[0]+E)/(E) );
-				}
+                    log_rate += log((Tuv - Suv + log_ratio_g_prior[1])/(Suv + log_ratio_g_prior[0])); ///// CHECK con log
+                }
 				else{ //birth move
 					//Complete graphs can not enter in this case
-					log_rate += log((log_ratio_g_prior[1] + possible_links - E)/(possible_links - E)) + log( (E)/(log_ratio_g_prior[0]+E-1) );
-				}
+                    log_rate += log((Suv + log_ratio_g_prior[0])/(Tuv - Suv + log_ratio_g_prior[1])); ///// CHECK con log
+                }
 			}
 			else{
-				std::cout<<"Impossibiee"<<std::endl;
+				std::cout<<"Impossibile"<<std::endl;
 				//throw std::runtime_error("Can not handle this kind of prior");
 			}
 

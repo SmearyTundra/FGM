@@ -40,12 +40,8 @@ bdgraph = function( data, n = NULL, method = "ggm", algorithm = "bdmcmc", iter =
         stop('FGM package supports only ggm method.')
     }
 
-    if(is.null(CCG_D)){ #<----- CCG modification
-    	D = diag(p)
-    }else{
-    	D = CCG_D
-    	#D = Dfactor * diag( p ) #<---- old CCG modification
-    }
+
+    D = diag(p)
 
     b      = df.prior
     b_star = b + n
