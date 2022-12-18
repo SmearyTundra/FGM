@@ -16,6 +16,7 @@
 #define matrix_H
 
 #include "util.h"
+#include <array>
 
 
 extern "C" {
@@ -81,6 +82,8 @@ extern "C" {
 	void scale_free( int *G, int *p );
 	
 	void transfer_data( int r_data[], int data[], int *n, int *p, int *size_unique_data );
+
+    int groups_cardinality( int z[], int *n_groups) // BRUHHHHH
 }
 
 #endif

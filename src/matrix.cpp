@@ -503,11 +503,11 @@ void select_multi_edges( double rates[], int index_selected_edges[], int *size_i
 void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Prior, int G[], int *ptr_E, int index_row[], int index_col[], int *sub_qp, double Ds[], double Dsijj[],
 				            double sigma[], double K[], int *b, int *p, int Theta[], int z[], int *n_groups, int groups_cardinality[] )
 {
-	int b1 = *b, one = 1, two = 2, dim = *p, p1 = dim - 1, p2 = dim - 2, dim1 = dim + 1, p2x2 = ( dim - 2 ) * 2, dim_groups = *n_groups;;
+	int b1 = *b, one = 1, two = 2, dim = *p, p1 = dim - 1, p2 = dim - 2, dim1 = dim + 1, p2x2 = ( dim - 2 ) * 2, dim_groups = *n_groups;
 	double alpha = 1.0, beta = 0.0, alpha1 = -1.0, beta1 = 1.0;
-	char transT = 'T', transN = 'N', sideL = 'L';																	
-	int possible_links = dim*(dim-1)*0.5;
+	char transT = 'T', transN = 'N', sideL = 'L';
 	int E = *ptr_E;
+
 
 	#pragma omp parallel
 	{
@@ -605,11 +605,11 @@ void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Pri
 
 				if(G[ij] == 1){ //death move
 					//Empty graphs can not enter in this case
-                    log_rate += log((Tuv - Suv + log_ratio_g_prior[1])/(Suv + log_ratio_g_prior[0])); ///// CHECK con log
+                    log_rate += log(Tuv - Suv + log_ratio_g_prior[1]) - log(Suv + log_ratio_g_prior[0]);
                 }
 				else{ //birth move
 					//Complete graphs can not enter in this case
-                    log_rate += log((Suv + log_ratio_g_prior[0])/(Tuv - Suv + log_ratio_g_prior[1])); ///// CHECK con log
+                    log_rate += log(Suv + log_ratio_g_prior[0]) - log(Tuv - Suv + log_ratio_g_prior[1]);
                 }
 			}
 			else{
@@ -1197,3 +1197,20 @@ void transfer_data( int r_data[], int data[], int *n, int *p, int *size_unique_d
 	delete[] unique_patterns;
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
+// Cardinality of every group in z[]
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
+int groups_cardinality( int z[], int *n_groups ){ // BRUHHHHH
+    int *p = z;
+    int size = std::end(z)- std::begin(z);
+    int dim_groups = *n_groups;
+    int cardinality[dim_groups] = {};
+    for( int i = 0; i < size; i++ ){
+        for( int j = 1; j <= dim_groups; j++){
+            if( z[i] == j) {
+                cardinality[j-1]++;
+            }
+        }
+    }
+    return cardinality;
+}

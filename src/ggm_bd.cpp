@@ -135,11 +135,10 @@ void ggm_bdmcmc_map( int *iter, int *burnin, int G[], double g_prior[], int *FGM
 		
 // - - - STEP 1: calculating birth and death rates - - - - - - - - - - - - - - - - - - - - - - - - |		
 		if(PriorType==2){
-
-			rates_bdmcmc_parallel( &rates[0], &log_ratio_g_prior[0], &PriorType, G, &FGM_E, &index_row[0], &index_col[0], &sub_qp, Ds, &Dsijj[0], &sigma[0], &K[0], b, &dim );
-		}
+            rates_bdmcmc_parallel( &rates[0], &log_ratio_g_prior[0], &PriorType, G, &FGM_E, &index_row[0], &index_col[0], &sub_qp, Ds, &Dsijj[0], &sigma[0], &K[0], b, &dim, &Theta[0], &z[0], &n_groups, &groups_cardinality[0] ); //BRUHH
+        }
 		else{
-			rates_bdmcmc_parallel( &rates[0], &log_ratio_g_prior[0], &PriorType, G, &FGM_E, &index_row[0], &index_col[0], &sub_qp, Ds, &Dsijj[0], &sigma[0], &K[0], b, &dim );
+            rates_bdmcmc_parallel( &rates[0], &log_ratio_g_prior[0], &PriorType, G, &FGM_E, &index_row[0], &index_col[0], &sub_qp, Ds, &Dsijj[0], &sigma[0], &K[0], b, &dim, &Theta[0], &z[0], &n_groups, &groups_cardinality[0] ); //BRUHH
 		}
 		
 		
