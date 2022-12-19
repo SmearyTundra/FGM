@@ -16,7 +16,7 @@
 #' @param g.prior May take a single value, a full pxp matrix or a vector of length 2. The first two cases refer to a Bernoulli prior where the parameter is equal for all the possible links (first case)
 #' or it is link specific (second case). The third case refers to the multiplicity correction prior (Bernoulli-Beta) and it takes the two Beta hyperparameters.
 #' @export
-bdgraph = function( data, n = NULL, method = "ggm", algorithm = "bdmcmc", iter = 5000,
+bdgraph = function( data, rho, n = NULL, method = "ggm", algorithm = "bdmcmc", iter = 5000,
                     burnin = iter / 2, not.cont = NULL, g.prior = 0.5, df.prior = 3,
                     CCG_D = NULL, g.start = "empty", jump = NULL, save = FALSE, print = 1000,
                     cores = NULL, threshold = 1e-8 )
@@ -25,7 +25,20 @@ bdgraph = function( data, n = NULL, method = "ggm", algorithm = "bdmcmc", iter =
     if( iter < burnin ) stop( " Number of iteration must be more than number of burn-in" )
     burnin <- floor( burnin )
     if( print > iter ) print = iter
-
+    #TODO add check on rho
+  
+    
+    #Converting the representation of the current partition from rho to z
+    z = rho_to_z(rho)
+    groups_cardinality=rho
+    n_groups=length(rho)
+    
+    
+    
+    
+    
+    
+    #TODO 
     cores = get_cores( cores = cores )
 
     list_S_n_p = get_S_n_p( data = data, method = method, n = n, not.cont = not.cont )
@@ -55,6 +68,10 @@ bdgraph = function( data, n = NULL, method = "ggm", algorithm = "bdmcmc", iter =
     G       = get_g_start( g.start = g.start, g_prior = g_prior, p = p )
     K       = get_K_start( G = G, g.start = g.start, Ts = Ts, b_star = b_star, threshold = threshold )
 
+    #
+    Theta=create_Theta(rho,G)
+    
+    
     if( save == TRUE )
     {
         qp1           = ( p * ( p - 1 ) / 2 ) + 1
@@ -94,20 +111,19 @@ bdgraph = function( data, n = NULL, method = "ggm", algorithm = "bdmcmc", iter =
     {
         if( ( method == "ggm" ) && ( algorithm == "bdmcmc" ) ) #FGM removes the jump == 1 condition
         {
-            result = .C( "ggm_bdmcmc_map",as.integer(iter), as.integer(burnin), G = as.integer(G), as.double(g_prior),  as.integer(FGM_gprior_length),
-                         as.double(Ts), K = as.double(K), as.integer(p), as.double(threshold),
-                         all_graphs = as.integer(all_graphs), all_weights = as.double(all_weights), K_hat = as.double(K_hat),
-                         sample_graphs = as.character(sample_graphs), graph_weights = as.double(graph_weights), size_sample_g = as.integer(size_sample_g),
-                         as.integer(b), as.integer(b_star), as.double(Ds), as.integer(print), PACKAGE = "FGM" )
+           # result = .C( "ggm_bdmcmc_map",as.integer(iter), as.integer(burnin), G = as.integer(G), as.double(g_prior),  as.integer(FGM_gprior_length),
+           #              as.double(Ts), K = as.double(K), as.integer(p), as.double(threshold),
+           #              all_graphs = as.integer(all_graphs), all_weights = as.double(all_weights), K_hat = as.double(K_hat),
+           #              sample_graphs = as.character(sample_graphs), graph_weights = as.double(graph_weights), size_sample_g = as.integer(size_sample_g),
+           #              as.integer(b), as.integer(b_star), as.double(Ds), as.integer(print), PACKAGE = "FGM" )
 
-            # Utilizzando la nuova funzione BRUH
-            #
-            # result = .C( "ggm_bdmcmc_map",as.integer(iter), as.integer(burnin), G = as.integer(G), as.double(g_prior),  as.integer(FGM_gprior_length),
-            #            as.double(Ts), K = as.double(K), as.integer(p), as.double(threshold),
-            #            all_graphs = as.integer(all_graphs), all_weights = as.double(all_weights), K_hat = as.double(K_hat),
-            #            sample_graphs = as.character(sample_graphs), graph_weights = as.double(graph_weights), size_sample_g = as.integer(size_sample_g),
-            #            as.integer(b), as.integer(b_star), as.double(Ds), as.integer(print), Theta = as.integer(Theta), z = as.integer(z), as.integer(n_groups),
-            #            groups_cardinality = as.integer(groups_cardinality), PACKAGE = "FGM" )
+
+            result = .C( "ggm_bdmcmc_map",as.integer(iter), as.integer(burnin), G = as.integer(G), as.double(g_prior),  as.integer(FGM_gprior_length),
+                       as.double(Ts), K = as.double(K), as.integer(p), as.double(threshold),
+                       all_graphs = as.integer(all_graphs), all_weights = as.double(all_weights), K_hat = as.double(K_hat),
+                       sample_graphs = as.character(sample_graphs), graph_weights = as.double(graph_weights), size_sample_g = as.integer(size_sample_g),
+                       as.integer(b), as.integer(b_star), as.double(Ds), as.integer(print), Theta = as.integer(Theta), z = as.integer(z), as.integer(n_groups),
+                        groups_cardinality = as.integer(groups_cardinality), PACKAGE = "FGM" )
         }
         else{
             stop('FGM can handle only the jump == 1 case. Code should be cleaned up.')
