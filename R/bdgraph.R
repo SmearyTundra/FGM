@@ -99,6 +99,15 @@ bdgraph = function( data, n = NULL, method = "ggm", algorithm = "bdmcmc", iter =
                          all_graphs = as.integer(all_graphs), all_weights = as.double(all_weights), K_hat = as.double(K_hat),
                          sample_graphs = as.character(sample_graphs), graph_weights = as.double(graph_weights), size_sample_g = as.integer(size_sample_g),
                          as.integer(b), as.integer(b_star), as.double(Ds), as.integer(print), PACKAGE = "FGM" )
+
+            # Utilizzando la nuova funzione BRUH
+            #
+            # result = .C( "ggm_bdmcmc_map",as.integer(iter), as.integer(burnin), G = as.integer(G), as.double(g_prior),  as.integer(FGM_gprior_length),
+            #            as.double(Ts), K = as.double(K), as.integer(p), as.double(threshold),
+            #            all_graphs = as.integer(all_graphs), all_weights = as.double(all_weights), K_hat = as.double(K_hat),
+            #            sample_graphs = as.character(sample_graphs), graph_weights = as.double(graph_weights), size_sample_g = as.integer(size_sample_g),
+            #            as.integer(b), as.integer(b_star), as.double(Ds), as.integer(print), Theta = as.integer(Theta), z = as.integer(z), as.integer(n_groups),
+            #            groups_cardinality = as.integer(groups_cardinality), PACKAGE = "FGM" )
         }
         else{
             stop('FGM can handle only the jump == 1 case. Code should be cleaned up.')
