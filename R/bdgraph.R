@@ -26,19 +26,19 @@ bdgraph = function( data, rho, n = NULL, method = "ggm", algorithm = "bdmcmc", i
     burnin <- floor( burnin )
     if( print > iter ) print = iter
     #TODO add check on rho
-  
-    
+
+
     #Converting the representation of the current partition from rho to z
     z = rho_to_z(rho)
     groups_cardinality=rho
     n_groups=length(rho)
-    
-    
-    
-    
-    
-    
-    #TODO 
+
+
+
+
+
+
+    #TODO
     cores = get_cores( cores = cores )
 
     list_S_n_p = get_S_n_p( data = data, method = method, n = n, not.cont = not.cont )
@@ -70,8 +70,8 @@ bdgraph = function( data, rho, n = NULL, method = "ggm", algorithm = "bdmcmc", i
 
     #
     Theta=create_Theta(rho,G)
-    
-    
+
+
     if( save == TRUE )
     {
         qp1           = ( p * ( p - 1 ) / 2 ) + 1
@@ -161,6 +161,7 @@ bdgraph = function( data, rho, n = NULL, method = "ggm", algorithm = "bdmcmc", i
     K_hat      = matrix( result $ K_hat, p, p, dimnames = list( colnames_data, colnames_data ) )
     last_graph = matrix( result $ G    , p, p, dimnames = list( colnames_data, colnames_data ) )
     last_K     = matrix( result $ K    , p, p )
+    last_Theta = matrix( result $ Theta, n_groups, n_groups)
 
     if( save == TRUE )
     {
@@ -177,7 +178,8 @@ bdgraph = function( data, rho, n = NULL, method = "ggm", algorithm = "bdmcmc", i
         }
 
         output = list( sample_graphs = sample_graphs, graph_weights = graph_weights, K_hat = K_hat,
-                       all_graphs = all_graphs, all_weights = all_weights, last_graph = last_graph, last_K = last_K )
+                       all_graphs = all_graphs, all_weights = all_weights, last_graph = last_graph,
+                       last_K = last_K, last_Theta = last_Theta )
     }else{
 
         stop('FGM package can not handle the save==FALSE option in the bdgraph function')
