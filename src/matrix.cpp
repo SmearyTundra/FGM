@@ -1200,16 +1200,16 @@ void transfer_data( int r_data[], int data[], int *n, int *p, int *size_unique_d
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
 // Cardinality of every group in z[]
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
-int* groups_cardinality( int z[], int *n_groups ){ // BRUHHHHH
-    int size = std::end(z)- std::begin(z);
-    int dim_groups = *n_groups;
-    int cardinality[dim_groups] = {};
-    for( int i = 0; i < size; i++ ){
-        for( int j = 1; j <= dim_groups; j++){
-            if( z[i] == j) {
-                cardinality[j-1]++;
-            }
-        }
-    }
-    return cardinality;
-}
+//int* groups_cardinality( int z[], int *n_groups ){
+//    int size = std::end(z)- std::begin(z);
+//    int dim_groups = *n_groups;
+//    int cardinality[dim_groups] = {};
+//    for( int i = 0; i < size; i++ ){
+//        for( int j = 1; j <= dim_groups; j++){
+//            if( z[i] == j) {
+//                cardinality[j-1]++;
+//            }
+//        }
+//    }
+//    return cardinality;
+//}

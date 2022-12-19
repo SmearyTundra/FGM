@@ -83,7 +83,7 @@ extern "C" {
 	
 	void transfer_data( int r_data[], int data[], int *n, int *p, int *size_unique_data );
 
-    int groups_cardinality( int z[], int *n_groups) // BRUHHHHH
+    //int groups_cardinality( int z[], int *n_groups)
 }
 
 #endif
