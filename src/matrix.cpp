@@ -511,7 +511,7 @@ void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Pri
 
 	#pragma omp parallel
 	{
-		int i, j, k, ij, jj, nu_star;
+		int i, j, k, ij, jj, u, v, Suv, Tuv, uv, nu_star;
 		double Dsjj, sum_diag, K022, a11, sigmajj_inv, log_rate;
 
 		double *K121         = new double[ 4 ];  
