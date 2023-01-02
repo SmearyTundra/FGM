@@ -69,7 +69,8 @@ bdgraph = function( data, rho, n = NULL, method = "ggm", algorithm = "bdmcmc", i
     K       = get_K_start( G = G, g.start = g.start, Ts = Ts, b_star = b_star, threshold = threshold )
 
     #
-    Theta=create_Theta(rho,G)
+    #Theta=create_Theta(rho,G)
+    Theta=get_S_from_G_rho(G, rho)
 
 
     if( save == TRUE )
