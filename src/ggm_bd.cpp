@@ -195,13 +195,13 @@ void ggm_bdmcmc_map( int *iter, int *burnin, int G[], double g_prior[], int *FGM
 		G[ selected_edge_i * dim + selected_edge_j ] = G[ selected_edge_ij ];
 		if( G[ selected_edge_ij ] )
 		{
-            ++Theta[selected_edge_v * dim_groups + selected_edge_u];
-            ++Theta[selected_edge_u * dim_groups + selected_edge_v];
+            ++Theta[selected_edge_v * (dim_groups-1) + selected_edge_u];
+            ++Theta[selected_edge_u * (dim_groups-1) + selected_edge_v];
             ++size_node[ selected_edge_i ];
 			++size_node[ selected_edge_j ]; 
 		}else{
-            --Theta[selected_edge_v * dim_groups + selected_edge_u];
-            --Theta[selected_edge_u * dim_groups + selected_edge_v];
+            --Theta[selected_edge_v * (dim_groups-1) + selected_edge_u];
+            --Theta[selected_edge_u * (dim_groups-1) + selected_edge_v];
             --size_node[ selected_edge_i ];
 			--size_node[ selected_edge_j ]; 
 		}
