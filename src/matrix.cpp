@@ -534,7 +534,7 @@ void rates_bdmcmc_parallel( double rates[], double log_ratio_g_prior[], int *Pri
 
             u = z[i];
             v = z[j];
-            uv = v * dim_groups + u;
+            uv = v * (dim_groups-1) + u;
             Suv = Theta[uv];
 
             if(u!=v) {
