@@ -24,7 +24,7 @@ extern "C" {
 	    #ifdef _OPENMP
 	        omp_set_num_threads( *cores );
 	    #else
-	        Rprintf( "  This OS does not support multi-threading for the BDgraph package  \n" ); 
+	        //Rprintf( "  This OS does not support multi-threading for the BDgraph package  \n" ); 
 	    #endif
 	}
 }
