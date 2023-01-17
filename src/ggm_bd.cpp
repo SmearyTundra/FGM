@@ -26,7 +26,7 @@ void ggm_bdmcmc_map( int *iter, int *burnin, int G[], double g_prior[], int *FGM
                     int *b, int *b_star, double Ds[], int *print, int Theta[], int z[], int *n_groups, int groups_cardinality[])
 {
 	int print_c = *print, iteration = *iter, burn_in = *burnin, count_all_g = 0;
-	int index_selected_edge, selected_edge_i, selected_edge_j, selected_edge_ij, size_sample_graph = *size_sample_g, selected_edge_u, selected_edge_v;
+	int index_selected_edge, selected_edge_i, selected_edge_j, selected_edge_ij, size_sample_graph = *size_sample_g; // selected_edge_u, selected_edge_v;
 	int i, j, ij, one = 1, dim = *p, pxp = dim * dim;
 	double Dsij, sum_weights = 0.0, weight_C, sum_rates;
 	bool this_one;
@@ -146,8 +146,8 @@ void ggm_bdmcmc_map( int *iter, int *burnin, int G[], double g_prior[], int *FGM
 		select_edge( &rates[0], &index_selected_edge, &sum_rates, &sub_qp );
 		selected_edge_i = index_row[ index_selected_edge ];
 		selected_edge_j = index_col[ index_selected_edge ];
-        selected_edge_u = z[selected_edge_i];
-        selected_edge_v = z[selected_edge_j];
+        //selected_edge_u = z[selected_edge_i];
+        //selected_edge_v = z[selected_edge_j];
 
 // - - - saving result - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |	
 		if( i_mcmc >= burn_in )
@@ -195,13 +195,13 @@ void ggm_bdmcmc_map( int *iter, int *burnin, int G[], double g_prior[], int *FGM
 		G[ selected_edge_i * dim + selected_edge_j ] = G[ selected_edge_ij ];
 		if( G[ selected_edge_ij ] )
 		{
-            ++Theta[selected_edge_v * (dim_groups-1) + selected_edge_u];
-            ++Theta[selected_edge_u * (dim_groups-1) + selected_edge_v];
+            //++Theta[selected_edge_v * (dim_groups-1) + selected_edge_u];
+            //++Theta[selected_edge_u * (dim_groups-1) + selected_edge_v];
             ++size_node[ selected_edge_i ];
 			++size_node[ selected_edge_j ]; 
 		}else{
-            --Theta[selected_edge_v * (dim_groups-1) + selected_edge_u];
-            --Theta[selected_edge_u * (dim_groups-1) + selected_edge_v];
+            //--Theta[selected_edge_v * (dim_groups-1) + selected_edge_u];
+            //--Theta[selected_edge_u * (dim_groups-1) + selected_edge_v];
             --size_node[ selected_edge_i ];
 			--size_node[ selected_edge_j ]; 
 		}
